@@ -2,18 +2,18 @@
 # https://github.com/linuxserver/docker-baseimage-fedora/blob/master/Dockerfile
 FROM alpine:edge AS rootfs-stage
 
-ARG S6_OVERLAY_VERSION
 RUN set -x \
   \
+  && VERSION=$(wget -O - https://api.github.com/repos/just-containers/s6-overlay/releases/latest |grep tag_name | cut -d '"' -f 4 | tr -d 'v') \
   && mkdir -p /root-out src \
   && wget -O src/s6-overlay-noarch.tar.xz \
-    https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-noarch.tar.xz \
+    https://github.com/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-noarch.tar.xz \
   && wget -O src/s6-overlay-arch.tar.xz \
-    https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-$(arch).tar.xz \
+    https://github.com/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-$(arch).tar.xz \
   && wget -O src/s6-overlay-symlinks-noarch.tar.xz \
-    https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-symlinks-noarch.tar.xz \
+    https://github.com/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-symlinks-noarch.tar.xz \
   && wget -O src/s6-overlay-symlinks-arch.tar.xz \
-    https://github.com/just-containers/s6-overlay/releases/download/v${S6_OVERLAY_VERSION}/s6-overlay-symlinks-arch.tar.xz \
+    https://github.com/just-containers/s6-overlay/releases/download/v${VERSION}/s6-overlay-symlinks-arch.tar.xz \
   && tar -C /root-out -Jxpf src/s6-overlay-noarch.tar.xz \
   && tar -C /root-out -Jxpf src/s6-overlay-arch.tar.xz \
   && tar -C /root-out -Jxpf src/s6-overlay-symlinks-noarch.tar.xz \
@@ -23,12 +23,12 @@ RUN set -x \
 FROM registry.fedoraproject.org/fedora-minimal:latest
 
 ARG TARGETARCH
-ARG CODE_VERSION
 
 COPY --from=rootfs-stage /root-out/ /
 
 RUN set -x \
   \
+  && VERSION=$(curl -s https://api.github.com/repos/coder/code-server/releases/latest |grep tag_name | cut -d '"' -f 4 | tr -d 'v') \
   && echo 'exclude=*.i386 *.i686' >> /etc/dnf.conf \
   && microdnf install -y --setopt=install_weak_deps=False --best \
     # tools
@@ -55,7 +55,7 @@ RUN set -x \
     kubernetes-client \
     helm \
     # apps
-    https://github.com/coder/code-server/releases/download/v$CODE_VERSION/code-server-$CODE_VERSION-$TARGETARCH.rpm \
+    https://github.com/coder/code-server/releases/download/v$VERSION/code-server-$VERSION-$TARGETARCH.rpm \
     python3-pip \
     conda \
   \
