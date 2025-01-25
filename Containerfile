@@ -21,7 +21,6 @@ RUN set -x \
   && rm -rf src
 
 FROM registry.fedoraproject.org/fedora-minimal:latest
-
 ARG TARGETARCH
 
 COPY --from=rootfs-stage /root-out/ /
