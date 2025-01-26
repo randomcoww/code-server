@@ -20,7 +20,9 @@ jobs:
     steps:
     - name: Build and release container
       run: |
-        cat > /kaniko/.docker/config.json <<EOF
+        TARGETARCH=amd64
+
+        cat > $DOCKER_CONFIG/config.json <<EOF
         {
           "auths": {
             "ghcr.io": {
@@ -33,6 +35,6 @@ jobs:
         /kaniko/executor \
           --dockerfile="./Containerfile" \
           --context="${{ github.repositoryUrl }}#${{ github.ref }}#${{ github.sha }}" \
-          --destination="ghcr.io/${{ github.repository }}:${{ github.head_ref || github.ref_name }}" \
-          --build-arg TARGETARCH=amd64 \
+          --destination="ghcr.io/${{ github.repository }}:${{ github.head_ref || github.ref_name }}-$TARGETARCH" \
+          --build-arg TARGETARCH=$TARGETARCH \
           --push-retry 3
