@@ -21,11 +21,13 @@ RUN set -x \
   && rm -rf src
 
 FROM registry.fedoraproject.org/fedora-minimal:latest
-ARG TARGETARCH
 
 COPY --from=rootfs-stage /root-out/ /
 
 RUN set -x \
+  \
+  && TARGETARCH=$(arch) \
+  && TARGETARCH=${TARGETARCH/x86_64/amd64} && TARGETARCH=${TARGETARCH/aarch64/arm64} \
   \
   && VERSION=$(curl -s https://api.github.com/repos/coder/code-server/releases/latest |grep tag_name | cut -d '"' -f 4 | tr -d 'v') \
   && echo 'exclude=*.i386 *.i686' >> /etc/dnf.conf \
@@ -58,6 +60,10 @@ RUN set -x \
     python3-pip \
     conda \
   \
+  && curl -L -o /usr/local/bin/mc \
+    https://dl.min.io/client/mc/release/linux-$TARGETARCH/mc \
+  && chmod +x /usr/local/bin/mc
+  \
   && microdnf clean all \
   && rm -rf \
     /var/cache \
@@ -67,10 +73,7 @@ RUN set -x \
   \
   && echo '%wheel ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/wheel \
   && ln -sf /usr/bin/python3 /usr/bin/python \
-  && ln -sf /usr/bin/podman-remote /usr/bin/podman \
-  && curl -L -o /usr/local/bin/mc \
-    https://dl.min.io/client/mc/release/linux-$TARGETARCH/mc \
-  && chmod +x /usr/local/bin/mc
+  && ln -sf /usr/bin/podman-remote /usr/bin/podman
 
 ENV \
   S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0 \
