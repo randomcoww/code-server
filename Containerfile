@@ -62,7 +62,7 @@ RUN set -x \
   \
   && curl -L -o /usr/local/bin/mc \
     https://dl.min.io/client/mc/release/linux-$TARGETARCH/mc \
-  && chmod +x /usr/local/bin/mc
+  && chmod +x /usr/local/bin/mc \
   \
   && microdnf clean all \
   && rm -rf \
