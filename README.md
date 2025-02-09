@@ -10,14 +10,6 @@ Latest version
 curl -s https://api.github.com/repos/coder/code-server/releases/latest |grep tag_name | cut -d '"' -f 4 | tr -d 'v'
 ```
 
-Tag latest by date
-
-```bash
-TAG=v$(date -u +'%Y%m%d').1
-git tag -a $TAG
-git push origin $TAG
-```
-
 #### Tensorflow setup
 
 ```bash
