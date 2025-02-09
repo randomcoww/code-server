@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
   push:
     tags:
-      - v*
+      - "*"
 
 jobs:
   build:
@@ -33,5 +33,5 @@ jobs:
         /kaniko/executor \
           --dockerfile="./Containerfile" \
           --context="${{ github.repositoryUrl }}#${{ github.ref }}#${{ github.sha }}" \
-          --destination="ghcr.io/${{ github.repository }}:${{ github.head_ref || github.ref_name }}" \
+          --destination="ghcr.io/${{ github.repository }}:v$(date -u +'%Y%m%d.%H%M')" \
           --push-retry 3
