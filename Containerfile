@@ -35,6 +35,7 @@ RUN set -x \
     # tools
     sudo \
     git-core \
+    git-lfs \
     iproute-tc \
     iptables-nft \
     iputils \
