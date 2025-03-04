@@ -60,6 +60,7 @@ RUN set -x \
     https://github.com/coder/code-server/releases/download/v$VERSION/code-server-$VERSION-$TARGETARCH.rpm \
     python3-pip \
     conda \
+    llama-cpp \
   \
   && curl -L -o /usr/local/bin/mc \
     https://dl.min.io/client/mc/release/linux-$TARGETARCH/mc \
