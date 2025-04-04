@@ -4,6 +4,14 @@ https://github.com/coder/code-server
 
 Runs under S6 overlay init to allow process cleanup
 
+Latest release
+
+```bash
+TAG=$(curl -s https://api.github.com/repos/coder/code-server/releases/latest |grep tag_name | cut -d '"' -f 4)
+git tag -a $TAG
+git push origin $TAG
+```
+
 #### Tensorflow setup
 
 ```bash
