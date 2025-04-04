@@ -21,6 +21,7 @@ RUN set -x \
   && rm -rf src
 
 FROM registry.fedoraproject.org/fedora-minimal:latest
+ARG VERSION
 
 COPY --from=rootfs-stage /root-out/ /
 
@@ -29,7 +30,7 @@ RUN set -x \
   && TARGETARCH=$(arch) \
   && TARGETARCH=${TARGETARCH/x86_64/amd64} && TARGETARCH=${TARGETARCH/aarch64/arm64} \
   \
-  && VERSION=$(curl -s https://api.github.com/repos/coder/code-server/releases/latest |grep tag_name | cut -d '"' -f 4 | tr -d 'v') \
+  # && VERSION=$(curl -s https://api.github.com/repos/coder/code-server/releases/latest | grep tag_name | cut -d '"' -f 4 | tr -d 'v') \
   && echo 'exclude=*.i386 *.i686' >> /etc/dnf.conf \
   && microdnf install -y --setopt=install_weak_deps=False --best \
     # tools
