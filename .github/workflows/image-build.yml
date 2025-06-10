@@ -47,6 +47,8 @@ jobs:
           --build-arg VERSION=$VERSION \
           --push-retry 3
   cleanup:
+    needs:
+      - build
     runs-on: arc-runner-${{ github.event.repository.name }}
     container:
       image: docker.io/node:current-alpine
