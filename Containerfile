@@ -1,3 +1,6 @@
+FROM registry.fedoraproject.org/fedora-minimal:latest
+ARG VERSION
+
 RUN set -x \
   \
   && TARGETARCH=$(arch) \
