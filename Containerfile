@@ -27,7 +27,6 @@ RUN set -x \
     tmux \
     bash-completion \
     # container
-    podman-remote \
     kubernetes-client \
     helm \
     # apps
@@ -48,8 +47,7 @@ RUN set -x \
 RUN set -x \
   \
   && echo '%wheel ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/wheel \
-  && ln -sf /usr/bin/python3 /usr/bin/python \
-  && ln -sf /usr/bin/podman-remote /usr/bin/podman
+  && ln -sf /usr/bin/python3 /usr/bin/python
 
 ENV \
   LANG=C.UTF-8
