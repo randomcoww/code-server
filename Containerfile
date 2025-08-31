@@ -1,10 +1,12 @@
 FROM registry.fedoraproject.org/fedora-minimal:latest
-ARG VERSION
+ARG RELEASE
 
 RUN set -x \
   \
-  && TARGETARCH=$(arch) \
-  && TARGETARCH=${TARGETARCH/x86_64/amd64} && TARGETARCH=${TARGETARCH/aarch64/arm64} \
+  && MINIO_ARCH=$(arch) \
+  && CODE_ARCH=$(arch) \
+  && MINIO_ARCH=${MINIO_ARCH/x86_64/amd64} && MINIO_ARCH=${MINIO_ARCH/aarch64/arm64} \
+  && CODE_ARCH=${CODE_ARCH/x86_64/x64} && CODE_ARCH=${CODE_ARCH/aarch64/arm64} \
   \
   && echo 'exclude=*.i386 *.i686' >> /etc/dnf.conf \
   && microdnf install -y --setopt=install_weak_deps=False --best \
@@ -34,7 +36,6 @@ RUN set -x \
     kubernetes-client \
     helm \
     # apps
-    https://github.com/coder/code-server/releases/download/v$VERSION/code-server-$VERSION-$TARGETARCH.rpm \
     python3-pip \
     conda \
   \
@@ -46,11 +47,20 @@ RUN set -x \
   \
   && ln -sf /usr/bin/python3 /usr/bin/python \
   && curl -L -o /usr/local/bin/mc \
-    https://dl.min.io/client/mc/release/linux-$TARGETARCH/mc \
-  && chmod +x /usr/local/bin/mc
+    https://dl.min.io/client/mc/release/linux-$MINIO_ARCH/mc \
+  && chmod +x /usr/local/bin/mc \
+  \
+  && curl -L -o openvscode-server.tar.gz \
+    https://github.com/gitpod-io/openvscode-server/releases/download/$RELEASE/$RELEASE-linux-$CODE_ARCH.tar.gz \
+  && mkdir -p /opt/openvscode-server \
+  && tar xzf openvscode-server.tar.gz --strip=1 -C /opt/openvscode-server \
+  && rm openvscode-server.tar.gz
 
 ENV \
   LANG=C.UTF-8 \
-  XDG_DATA_DIRS=/usr/local/share:/usr/share
+  LC_ALL=C.UTF-8 \
+  EDITOR=code \
+  VISUAL=code \
+  GIT_EDITOR="code --wait"
 
 ENTRYPOINT ["tini", "--"]

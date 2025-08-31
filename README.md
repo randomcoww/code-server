@@ -1,13 +1,13 @@
 #### Container for code-server (VS Code in a browser)
 
-https://github.com/coder/code-server
+https://github.com/gitpod-io/openvscode-server
 
 Runs under S6 overlay init to allow process cleanup
 
 Latest release
 
 ```bash
-curl -s https://api.github.com/repos/coder/code-server/releases/latest | grep tag_name | cut -d '"' -f 4 | tr -d 'v'
+curl -s https://api.github.com/repos/gitpod-io/openvscode-server/releases/latest | grep tag_name | cut -d '"' -f 4 | sed 's/openvscode-server-v//'
 ```
 
 #### Tensorflow setup

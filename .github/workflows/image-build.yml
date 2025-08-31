@@ -28,7 +28,9 @@ jobs:
     steps:
     - name: Set tag
       run: |
-        echo VERSION=$(wget -O - https://api.github.com/repos/coder/code-server/releases/latest | grep tag_name | cut -d '"' -f 4 | tr -d 'v') | tee -a "$GITHUB_ENV"
+        RELEASE=$(wget -O - https://api.github.com/repos/gitpod-io/openvscode-server/releases/latest | grep tag_name | cut -d '"' -f 4)
+        echo RELEASE=$RELEASE | tee -a "$GITHUB_ENV"
+        echo VERSION=$(echo $RELEASE |sed 's/openvscode-server-//') | tee -a "$GITHUB_ENV"
         echo TAG=$(date -u +'%Y%m%d.%H%M') | tee -a "$GITHUB_ENV"
 
     - name: Build and release container
@@ -47,8 +49,8 @@ jobs:
         /kaniko/executor \
           --dockerfile="./Containerfile" \
           --context="${{ github.repositoryUrl }}#${{ github.ref }}#${{ github.sha }}" \
-          --destination="ghcr.io/${{ github.repository }}:v$VERSION.$TAG" \
-          --build-arg VERSION=$VERSION \
+          --destination="ghcr.io/${{ github.repository }}:$VERSION.$TAG" \
+          --build-arg RELEASE=$RELEASE \
           --push-retry 3
   cleanup:
     needs:
