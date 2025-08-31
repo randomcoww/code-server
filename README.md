@@ -1,8 +1,6 @@
-#### Container for code-server (VS Code in a browser)
+#### Container for openvscode-server (VS Code in a browser)
 
 https://github.com/gitpod-io/openvscode-server
-
-Runs under S6 overlay init to allow process cleanup
 
 Latest release
 
