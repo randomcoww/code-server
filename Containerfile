@@ -32,9 +32,6 @@ RUN set -x \
     tmux \
     bash-completion \
     gawk \
-    # container
-    kubernetes-client \
-    helm \
     # apps
     python3-pip \
     conda \
