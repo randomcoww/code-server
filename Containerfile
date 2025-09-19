@@ -43,11 +43,11 @@ RUN set -x \
   && echo '%wheel ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/wheel \
   \
   && ln -sf /usr/bin/python3 /usr/bin/python \
-  && curl -s -L -o /usr/local/bin/mc \
+  && curl -fsSL -o /usr/local/bin/mc \
     https://dl.min.io/client/mc/release/linux-$MINIO_ARCH/mc \
   && chmod +x /usr/local/bin/mc \
   \
-  && curl -s -L -o openvscode-server.tar.gz \
+  && curl -fsSL -o openvscode-server.tar.gz \
     https://github.com/gitpod-io/openvscode-server/releases/download/$RELEASE/$RELEASE-linux-$CODE_ARCH.tar.gz \
   && mkdir -p /opt/openvscode-server \
   && tar xzf openvscode-server.tar.gz --strip=1 -C /opt/openvscode-server \
