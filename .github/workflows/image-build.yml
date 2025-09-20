@@ -52,7 +52,15 @@ jobs:
           --destination="$INTERNAL_REGISTRY/${{ github.repository }}:$VERSION.$TAG" \
           --registry-certificate=$INTERNAL_REGISTRY=$DOCKER_CONFIG/internal.crt \
           --build-arg RELEASE=$RELEASE \
-          --push-retry 3
+          --skip-unused-stages \
+          --snapshot-mode=redo \
+          --cache=true \
+          --cache-dir=/cache \
+          --compressed-caching=false \
+          --cleanup \
+          --cache-copy-layers \
+          --image-fs-extract-retry=6 \
+          --push-retry=6
   cleanup:
     needs:
       - build
